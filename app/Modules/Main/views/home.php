@@ -1,0 +1,1 @@
+<div class="grid"><div class="card"><div style="font-weight:700;margin-bottom:8px;">CRM работает ✅</div><div class="muted">Теперь всё рисуется одним базовым шаблоном. Дальше меняем только центральный контент.</div></div></div>
