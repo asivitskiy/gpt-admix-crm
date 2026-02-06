@@ -15,3 +15,7 @@
 ## Роуты
 /login, /logout, /me
 /, /orders, /clients, /schedule, /billing, /expenses, /messages, /materials, /admin
+
+
+## Архитектура
+См. файл `ARCHITECTURE.md`.

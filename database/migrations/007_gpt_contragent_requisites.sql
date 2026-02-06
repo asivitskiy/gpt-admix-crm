@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `gpt_contragent_requisites` (
+  `gpt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gpt_contragent_id` int(11) NOT NULL,
+  `gpt_legal_name` varchar(255) NOT NULL,
+  `gpt_inn` varchar(32) DEFAULT NULL,
+  `gpt_jur_address` text,
+  `gpt_rs` varchar(32) DEFAULT NULL,
+  `gpt_bank_name` varchar(255) DEFAULT NULL,
+  `gpt_bank_bik` varchar(32) DEFAULT NULL,
+  `gpt_director_fio` varchar(255) DEFAULT NULL,
+  `gpt_basis` varchar(255) DEFAULT NULL,
+  `gpt_tax_mode` varchar(64) DEFAULT NULL,
+  `gpt_contract_no` varchar(64) NOT NULL DEFAULT '',
+  `gpt_details` text,
+  `gpt_is_default` tinyint(1) NOT NULL DEFAULT '0',
+  `gpt_active` tinyint(1) NOT NULL DEFAULT '1',
+  `gpt_dadata_json` text,
+  PRIMARY KEY (`gpt_id`),
+  KEY `gpt_idx_contragent` (`gpt_contragent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

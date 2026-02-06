@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `gpt_contragent_contacts` (
+  `gpt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gpt_contragent_id` int(11) NOT NULL,
+  `gpt_requisite_id` int(11) DEFAULT NULL,
+  `gpt_name` varchar(120) NOT NULL,
+  `gpt_phone` varchar(30) DEFAULT NULL,
+  `gpt_phone_clear` varchar(30) NOT NULL DEFAULT '',
+  `gpt_email` varchar(120) DEFAULT NULL,
+  `gpt_chat_id` varchar(64) NOT NULL DEFAULT '',
+  `gpt_is_default` tinyint(1) NOT NULL DEFAULT '0',
+  `gpt_is_notify_default` tinyint(1) NOT NULL DEFAULT '0',
+  `gpt_is_invoice_default` tinyint(1) NOT NULL DEFAULT '0',
+  `gpt_comment` varchar(255) DEFAULT NULL,
+  `gpt_sort` int(11) NOT NULL DEFAULT '0',
+  `gpt_active` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`gpt_id`),
+  KEY `gpt_idx_contragent` (`gpt_contragent_id`),
+  KEY `gpt_idx_requisite` (`gpt_requisite_id`),
+  KEY `idx_gpt_phone_clear` (`gpt_phone_clear`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
