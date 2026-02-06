@@ -26,7 +26,49 @@ function gpt_json_err(string $msg, int $code = 400): void {
 }
 
 $action = trim((string)($_POST['gpt_action'] ?? $_GET['gpt_action'] ?? ''));
+// Some older/buggy calls may hit the endpoint with only gpt_contragent_id.
+// Treat it as a request for get_contragent.
+if ($action === '' && isset($_GET['gpt_contragent_id'])) {
+    $action = 'get_contragent';
+}
 if ($action === '') gpt_json_err('No action');
+
+// ---------- backward-compatible aliases (widget expects these action names) ----------
+// The widget (contragents_widget.js) historically uses add_* / update_* verbs and
+// different id param names (gpt_contact_id, gpt_delivery_id, ...). We normalize here.
+$aliases = [
+    // contacts
+    'add_contact'    => 'save_contact',
+    'update_contact' => 'save_contact',
+    // requisites
+    'add_requisite'    => 'save_requisite',
+    'update_requisite' => 'save_requisite',
+    // delivery
+    'add_delivery'    => 'save_delivery',
+    'update_delivery' => 'save_delivery',
+];
+if (isset($aliases[$action])) {
+    $action = $aliases[$action];
+}
+
+// normalize commonly-used id param names from the widget
+// (we write into $_POST/$_GET so the rest of the code can stay unchanged)
+if (isset($_POST['gpt_contact_id']) && !isset($_POST['gpt_id'])) {
+    $_POST['gpt_id'] = $_POST['gpt_contact_id'];
+}
+if (isset($_POST['gpt_delivery_id']) && !isset($_POST['gpt_id'])) {
+    $_POST['gpt_id'] = $_POST['gpt_delivery_id'];
+}
+if (isset($_POST['gpt_requisite_id']) && !isset($_POST['gpt_id']) && in_array($action, ['delete_requisite','set_default_requisite'], true)) {
+    // just in case someone calls delete/set_default with gpt_requisite_id
+    $_POST['gpt_id'] = $_POST['gpt_requisite_id'];
+}
+if (isset($_POST['gpt_delivery_id']) && !isset($_POST['gpt_id']) && in_array($action, ['delete_delivery','set_default_delivery'], true)) {
+    $_POST['gpt_id'] = $_POST['gpt_delivery_id'];
+}
+if (isset($_POST['gpt_contact_id']) && !isset($_POST['gpt_id']) && in_array($action, ['delete_contact','set_default_contact','set_notify_contact','set_invoice_contact'], true)) {
+    $_POST['gpt_id'] = $_POST['gpt_contact_id'];
+}
 
 // ---------- helpers ----------
 function mb_lower(string $s): string {
@@ -102,7 +144,6 @@ if ($action === 'search_contragents') {
         $and = [];
         foreach ($tokens as $t) {
             if ($t === '') continue;
-            // if token looks like phone/email/inn keep as is
             $and[] = "$concat LIKE ?";
             $params[] = '%' . $t . '%';
         }
@@ -126,6 +167,19 @@ if ($action === 'search_contragents') {
     $st->execute($params);
     $items = $st->fetchAll(PDO::FETCH_ASSOC);
     gpt_json_ok(['items' => $items]);
+}
+
+// Old/legacy fields from the original contragents table (for reference panels)
+// Widget expects: { ok:1, data: { fullinfo, address, notification_number, contacts } }
+if ($action === 'get_old_contragent_fields') {
+    $cid = (int)($_GET['gpt_contragent_id'] ?? 0);
+    if ($cid <= 0) gpt_json_err('No contragent id');
+
+    $st = $pdo->prepare('SELECT fullinfo, address, notification_number, contacts FROM contragents WHERE id=? LIMIT 1');
+    $st->execute([$cid]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) gpt_json_err('Not found', 404);
+    gpt_json_ok($row);
 }
 
 if ($action === 'get_contragent') {
@@ -256,21 +310,51 @@ if ($action === 'delete_requisite') {
 
 if ($action === 'set_default_requisite') {
     $cid = (int)($_POST['gpt_contragent_id'] ?? 0);
-    $id  = (int)($_POST['gpt_id'] ?? 0);
+    $id  = (int)($_POST['gpt_id'] ?? $_POST['gpt_requisite_id'] ?? 0);
     if ($cid<=0 || $id<=0) gpt_json_err('Bad params');
+
+    // Узнаём текущее значение
+    $st = $pdo->prepare("SELECT gpt_is_default AS v
+                         FROM gpt_contragent_requisites
+                         WHERE gpt_contragent_id=? AND gpt_id=? AND gpt_active=1
+                         LIMIT 1");
+    $st->execute([$cid, $id]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) gpt_json_err('Not found', 404);
+    $cur = (int)($row['v'] ?? 0);
+
     $pdo->beginTransaction();
     try {
-        $st = $pdo->prepare('UPDATE gpt_contragent_requisites SET gpt_is_default=0 WHERE gpt_contragent_id=?');
+        if ($cur === 1) {
+            // снять
+            $st = $pdo->prepare("UPDATE gpt_contragent_requisites
+                                 SET gpt_is_default=0
+                                 WHERE gpt_contragent_id=? AND gpt_id=?");
+            $st->execute([$cid, $id]);
+            $pdo->commit();
+            gpt_json_ok(['gpt_id' => $id, 'value' => 0]);
+        }
+
+        // поставить (один на список)
+        $st = $pdo->prepare("UPDATE gpt_contragent_requisites
+                             SET gpt_is_default=0
+                             WHERE gpt_contragent_id=?");
         $st->execute([$cid]);
-        $st = $pdo->prepare('UPDATE gpt_contragent_requisites SET gpt_is_default=1 WHERE gpt_contragent_id=? AND gpt_id=?');
+
+        $st = $pdo->prepare("UPDATE gpt_contragent_requisites
+                             SET gpt_is_default=1
+                             WHERE gpt_contragent_id=? AND gpt_id=?");
         $st->execute([$cid, $id]);
+
         $pdo->commit();
     } catch (Throwable $e) {
         $pdo->rollBack();
         gpt_json_err('DB error: '.$e->getMessage(), 500);
     }
-    gpt_json_ok(['gpt_id' => $id]);
+
+    gpt_json_ok(['gpt_id' => $id, 'value' => 1]);
 }
+
 
 // ===== contacts =====
 if ($action === 'list_contacts') {
@@ -342,25 +426,46 @@ if ($action === 'delete_contact') {
 
 if (in_array($action, ['set_default_contact','set_notify_contact','set_invoice_contact'], true)) {
     $cid = (int)($_POST['gpt_contragent_id'] ?? 0);
-    $id  = (int)($_POST['gpt_id'] ?? 0);
+    $id  = (int)($_POST['gpt_id'] ?? $_POST['gpt_contact_id'] ?? 0); // на всякий случай
     if ($cid<=0 || $id<=0) gpt_json_err('Bad params');
 
-    $col = ($action === 'set_default_contact') ? 'gpt_is_default' : (($action === 'set_notify_contact') ? 'gpt_is_notify_default' : 'gpt_is_invoice_default');
+    $col = ($action === 'set_default_contact')
+        ? 'gpt_is_default'
+        : (($action === 'set_notify_contact') ? 'gpt_is_notify_default' : 'gpt_is_invoice_default');
+
+    // toggle: если уже 1 — снять (0). если 0 — поставить (1) и обнулить у остальных
+    $st = $pdo->prepare("SELECT {$col} AS v FROM gpt_contragent_contacts WHERE gpt_contragent_id=? AND gpt_id=? LIMIT 1");
+    $st->execute([$cid, $id]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) gpt_json_err('Not found', 404);
+    $cur = (int)($row['v'] ?? 0);
 
     $pdo->beginTransaction();
     try {
+        if ($cur === 1) {
+            // снять
+            $st = $pdo->prepare("UPDATE gpt_contragent_contacts SET {$col}=0 WHERE gpt_contragent_id=? AND gpt_id=?");
+            $st->execute([$cid, $id]);
+            $pdo->commit();
+            gpt_json_ok(['gpt_id' => $id, 'value' => 0]);
+        }
+
+        // поставить (один на весь список)
         $st = $pdo->prepare("UPDATE gpt_contragent_contacts SET {$col}=0 WHERE gpt_contragent_id=?");
         $st->execute([$cid]);
+
         $st = $pdo->prepare("UPDATE gpt_contragent_contacts SET {$col}=1 WHERE gpt_contragent_id=? AND gpt_id=?");
         $st->execute([$cid, $id]);
+
         $pdo->commit();
     } catch (Throwable $e) {
         $pdo->rollBack();
         gpt_json_err('DB error: '.$e->getMessage(), 500);
     }
 
-    gpt_json_ok(['gpt_id' => $id]);
+    gpt_json_ok(['gpt_id' => $id, 'value' => 1]);
 }
+
 
 // ===== delivery =====
 if ($action === 'list_delivery') {
@@ -409,23 +514,51 @@ if ($action === 'delete_delivery') {
 
 if ($action === 'set_default_delivery') {
     $cid = (int)($_POST['gpt_contragent_id'] ?? 0);
-    $id  = (int)($_POST['gpt_id'] ?? 0);
+    $id  = (int)($_POST['gpt_id'] ?? $_POST['gpt_delivery_id'] ?? 0);
     if ($cid<=0 || $id<=0) gpt_json_err('Bad params');
+
+    // Узнаём текущее значение
+    $st = $pdo->prepare("SELECT gpt_is_default AS v
+                         FROM gpt_contragent_delivery
+                         WHERE gpt_contragent_id=? AND gpt_id=? AND gpt_active=1
+                         LIMIT 1");
+    $st->execute([$cid, $id]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) gpt_json_err('Not found', 404);
+    $cur = (int)($row['v'] ?? 0);
 
     $pdo->beginTransaction();
     try {
-        $st = $pdo->prepare('UPDATE gpt_contragent_delivery SET gpt_is_default=0 WHERE gpt_contragent_id=?');
+        if ($cur === 1) {
+            // снять
+            $st = $pdo->prepare("UPDATE gpt_contragent_delivery
+                                 SET gpt_is_default=0
+                                 WHERE gpt_contragent_id=? AND gpt_id=?");
+            $st->execute([$cid, $id]);
+            $pdo->commit();
+            gpt_json_ok(['gpt_id' => $id, 'value' => 0]);
+        }
+
+        // поставить (один на список)
+        $st = $pdo->prepare("UPDATE gpt_contragent_delivery
+                             SET gpt_is_default=0
+                             WHERE gpt_contragent_id=?");
         $st->execute([$cid]);
-        $st = $pdo->prepare('UPDATE gpt_contragent_delivery SET gpt_is_default=1 WHERE gpt_contragent_id=? AND gpt_id=?');
+
+        $st = $pdo->prepare("UPDATE gpt_contragent_delivery
+                             SET gpt_is_default=1
+                             WHERE gpt_contragent_id=? AND gpt_id=?");
         $st->execute([$cid, $id]);
+
         $pdo->commit();
     } catch (Throwable $e) {
         $pdo->rollBack();
         gpt_json_err('DB error: '.$e->getMessage(), 500);
     }
 
-    gpt_json_ok(['gpt_id' => $id]);
+    gpt_json_ok(['gpt_id' => $id, 'value' => 1]);
 }
+
 
 // ===== DaData =====
 if ($action === 'dadata_by_inn') {

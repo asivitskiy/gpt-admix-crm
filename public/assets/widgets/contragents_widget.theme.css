@@ -1,0 +1,326 @@
+/* =========================================================
+   CONTRAGENTS WIDGET — THEME (skin)
+   Единый стиль под ADMIX CRM.
+   Использует переменные из layout.php:
+   --bg --panel --card --text --muted --accent --line --radius
+   ========================================================= */
+
+:root{
+  --nc-bg:      var(--bg);
+  --nc-panel:   var(--panel);
+  --nc-card:    var(--card);
+  --nc-text:    var(--text);
+  --nc-muted:   var(--muted);
+  --nc-accent:  var(--accent);
+  --nc-line:    var(--line);
+  --nc-radius:  var(--radius);
+
+  /* Семантика (если в проекте появятся — подхватит; иначе fallback) */
+  --nc-success: var(--success, #22c55e);
+  --nc-warning: var(--warning, #f59e0b);
+  --nc-danger:  var(--danger,  #ef4444);
+
+  --nc-shadow:  0 18px 70px color-mix(in srgb, var(--nc-text) 22%, transparent);
+  --nc-shadow2: 0 14px 40px color-mix(in srgb, var(--nc-text) 16%, transparent);
+  --nc-focus:   0 0 0 3px color-mix(in srgb, var(--nc-accent) 18%, transparent);
+
+  --nc-soft:    color-mix(in srgb, var(--nc-accent) 10%, transparent);
+  --nc-soft2:   color-mix(in srgb, var(--nc-accent) 16%, transparent);
+  --nc-press:   color-mix(in srgb, var(--nc-accent) 22%, transparent);
+
+  --nc-backdrop: rgba(0,0,0,.45);
+}
+
+/* ===== Overlay / iframe wrapper ===== */
+.gpt_newcontragents_overlay{
+  background: var(--nc-backdrop);
+}
+#crmNcModal .crmNcBackdrop{
+  background: var(--nc-backdrop);
+}
+#crmNcModal .crmNcWindow{
+  background: transparent;
+  border-radius: var(--nc-radius);
+  box-shadow: var(--nc-shadow);
+}
+
+/* ===== Main modal ===== */
+.gpt_newcontragents_modal{
+  background: var(--nc-bg);
+  color: var(--nc-text);
+  border: 1px solid var(--nc-line);
+  border-radius: var(--nc-radius);
+  box-shadow: var(--nc-shadow);
+}
+.gpt_newcontragents_modal_header{
+  background: var(--nc-card);
+  border-bottom: 1px solid color-mix(in srgb, var(--nc-line) 80%, transparent);
+}
+.gpt_newcontragents_modal_title{
+  color: var(--nc-text);
+}
+
+/* ===== Columns ===== */
+.gpt_newcontragents_col{
+  background: var(--nc-card);
+  border: 1px solid var(--nc-line);
+  border-radius: var(--nc-radius);
+}
+.gpt_newcontragents_colHead{
+  background: var(--nc-card);
+  border-bottom: 1px solid color-mix(in srgb, var(--nc-line) 80%, transparent);
+}
+.gpt_newcontragents_colBody{
+  background: transparent;
+  color: var(--nc-text);
+}
+
+/* ===== Lists ===== */
+.gpt_newcontragents_list{
+  background: var(--nc-card);
+  border: 1px solid var(--nc-line);
+}
+.gpt_newcontragents_list_item{
+  background: transparent;
+  border-bottom: 1px solid color-mix(in srgb, var(--nc-line) 70%, transparent);
+  color: var(--nc-text);
+}
+.gpt_newcontragents_list_item:hover{
+  background: color-mix(in srgb, var(--nc-accent) 8%, var(--nc-card));
+}
+
+/* ===== Inputs / selects / textarea ===== */
+.gpt_newcontragents_input,
+.gpt_newcontragents_textarea,
+.gpt_newcontragents_select,
+.gpt_newcontragents_topPickInput,
+.gpt_newcontragents_dd_btn{
+  background: var(--nc-panel);
+  color: var(--nc-text);
+  border: 1px solid color-mix(in srgb, var(--nc-line) 90%, transparent);
+}
+.gpt_newcontragents_input::placeholder,
+.gpt_newcontragents_textarea::placeholder{
+  color: color-mix(in srgb, var(--nc-muted) 80%, transparent);
+  opacity: 1;
+}
+.gpt_newcontragents_input:focus,
+.gpt_newcontragents_textarea:focus,
+.gpt_newcontragents_select:focus,
+.gpt_newcontragents_topPickInput:focus{
+  outline: none;
+  border-color: color-mix(in srgb, var(--nc-accent) 42%, var(--nc-line));
+  box-shadow: var(--nc-focus);
+}
+
+/* select2-display */
+.gpt_newcontragents_select2_display{
+  background: var(--nc-panel);
+  border: 1px solid color-mix(in srgb, var(--nc-line) 90%, transparent);
+  color: var(--nc-text);
+}
+.gpt_newcontragents_select2_display .gpt_newcontragents_select2_line2{
+  color: var(--nc-muted);
+}
+.gpt_newcontragents_select option{
+  background: var(--nc-panel);
+  color: var(--nc-text);
+}
+
+/* ===== Custom dropdown ===== */
+.gpt_newcontragents_dd_btn:after{
+  color: var(--nc-muted);
+}
+.gpt_newcontragents_dd_l2{
+  color: var(--nc-muted);
+}
+.gpt_newcontragents_dd_menu{
+  background: var(--nc-card);
+  border: 1px solid color-mix(in srgb, var(--nc-line) 90%, transparent);
+  box-shadow: var(--nc-shadow2);
+}
+.gpt_newcontragents_dd_item{
+  background: transparent;
+  border-bottom: 1px solid color-mix(in srgb, var(--nc-line) 70%, transparent);
+  color: var(--nc-text);
+}
+.gpt_newcontragents_dd_item:hover{
+  background: color-mix(in srgb, var(--nc-accent) 8%, var(--nc-card));
+}
+.gpt_newcontragents_dd_item_active{
+  background: color-mix(in srgb, var(--nc-accent) 14%, var(--nc-card));
+}
+
+/* ===== Buttons ===== */
+.gpt_newcontragents_btn,
+.gpt_newcontragents_mini_btn,
+.gpt_newcontragents_close,
+.gpt_newcontragents_closeMini{
+  background: var(--nc-soft);
+  color: var(--nc-text);
+  border: 1px solid color-mix(in srgb, var(--nc-accent) 28%, var(--nc-line));
+  box-shadow: none;
+}
+.gpt_newcontragents_btn:hover,
+.gpt_newcontragents_mini_btn:hover,
+.gpt_newcontragents_close:hover,
+.gpt_newcontragents_closeMini:hover{
+  background: var(--nc-soft2);
+}
+.gpt_newcontragents_btn:active,
+.gpt_newcontragents_mini_btn:active{
+  background: var(--nc-press);
+}
+.gpt_newcontragents_primary_btn{
+  background: color-mix(in srgb, var(--nc-accent) 16%, var(--nc-panel));
+  border-color: color-mix(in srgb, var(--nc-accent) 30%, var(--nc-line));
+}
+
+/* Header action buttons */
+#gpt_newcontragents_addContragentBtn{
+  background: color-mix(in srgb, var(--nc-success) 18%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--nc-success) 45%, var(--nc-line)) !important;
+  color: var(--nc-text) !important;
+}
+#gpt_newcontragents_editContragentBtn{
+  background: color-mix(in srgb, var(--nc-warning) 18%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--nc-warning) 45%, var(--nc-line)) !important;
+  color: var(--nc-text) !important;
+}
+#gpt_newcontragents_closeBtn{
+  background: color-mix(in srgb, var(--nc-danger) 18%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--nc-danger) 45%, var(--nc-line)) !important;
+  color: var(--nc-text) !important;
+}
+
+/* Disabled */
+.gpt_newcontragents_btn_disabled{
+  opacity: .45 !important;
+}
+
+/* ===== Cards / blocks ===== */
+.gpt_newcontragents_reqRow,
+.gpt_newcontragents_reqCell,
+.gpt_newcontragents_contactCard{
+  background: var(--nc-card);
+  border: 1px solid color-mix(in srgb, var(--nc-line) 85%, transparent);
+}
+
+/* Submodal */
+.gpt_newcontragents_subOverlay{
+  background: var(--nc-backdrop);
+}
+.gpt_newcontragents_subModal{
+  background: var(--nc-card);
+  border: 1px solid var(--nc-line);
+  box-shadow: var(--nc-shadow);
+  border-radius: var(--nc-radius);
+}
+.gpt_newcontragents_subHeader{
+  background: var(--nc-card);
+  border-bottom: 1px solid color-mix(in srgb, var(--nc-line) 80%, transparent);
+}
+
+/* Old data block */
+.gpt_newcontragents_oldBlock{
+  background: var(--nc-panel);
+  border: 1px solid color-mix(in srgb, var(--nc-line) 85%, transparent);
+  box-shadow: var(--nc-shadow2);
+  color: var(--nc-text);
+}
+.gpt_newcontragents_oldBlockLabel{
+  color: var(--nc-muted);
+}
+
+/* Delivery list */
+#gpt_newcontragents_deliveryList .gpt_newcontragents_card{
+  background: var(--nc-card) !important;
+  border: 1px solid color-mix(in srgb, var(--nc-line) 85%, transparent) !important;
+  box-shadow: none !important;
+}
+#gpt_newcontragents_deliveryList .gpt_newcontragents_small{
+  color: var(--nc-muted) !important;
+}
+#gpt_newcontragents_deliveryList .gpt_newcontragents_okhint{
+  color: color-mix(in srgb, var(--nc-muted) 80%, transparent) !important;
+}
+#gpt_newcontragents_deliveryList .gpt_newcontragents_deliveryAddress{
+  color: var(--nc-text) !important;
+}
+
+/* Default-active state */
+.gpt_newcontragents_btn_default_active{
+  background: color-mix(in srgb, var(--nc-success) 18%, transparent) !important;
+  border-color: color-mix(in srgb, var(--nc-success) 55%, var(--nc-line)) !important;
+  color: var(--nc-text) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nc-success) 16%, transparent) !important;
+}
+
+/* link-hover */
+.gpt_newcontragents_link_hover{
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nc-warning) 20%, transparent), var(--nc-shadow2);
+  border-color: color-mix(in srgb, var(--nc-warning) 35%, var(--nc-line)) !important;
+}
+
+/* Phone highlight */
+.gpt-phone-ok{
+  border-color: color-mix(in srgb, var(--nc-success) 60%, var(--nc-line)) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--nc-success) 18%, transparent) !important;
+}
+.gpt-phone-bad{
+  border-color: color-mix(in srgb, var(--nc-danger) 60%, var(--nc-line)) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--nc-danger) 18%, transparent) !important;
+}
+/* Сделать активные кнопки доставки такими же, как активные в контактах/реквизитах */
+.gpt_newcontragents_btn_green{
+  background: color-mix(in srgb, var(--success, #22c55e) 18%, transparent) !important;
+  border-color: color-mix(in srgb, var(--success, #22c55e) 55%, var(--line)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success, #22c55e) 16%, transparent) !important;
+}
+
+/* если вдруг “активность” на доставке ставится не на btn_green, а на default_active — тоже норм */
+.gpt_newcontragents_btn_default_active{
+  background: color-mix(in srgb, var(--success, #22c55e) 18%, transparent) !important;
+  border-color: color-mix(in srgb, var(--success, #22c55e) 55%, var(--line)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success, #22c55e) 16%, transparent) !important;
+}
+
+/* единый вид "активно по умолчанию" для всех блоков, включая доставку */
+.gpt_newcontragents_btn_default_active,
+.gpt_newcontragents_btn_green{
+  background: color-mix(in srgb, var(--success, #22c55e) 18%, transparent) !important;
+  border-color: color-mix(in srgb, var(--success, #22c55e) 55%, var(--line)) !important;
+  color: var(--text) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success, #22c55e) 16%, transparent) !important;
+}
+/* ===== Delivery buttons = same look as Contacts ===== */
+#gpt_newcontragents_deliveryList .gpt_newcontragents_mini_btn{
+  background: var(--nc-soft) !important;
+  color: var(--nc-text) !important;
+  border: 1px solid color-mix(in srgb, var(--nc-accent) 28%, var(--nc-line)) !important;
+  box-shadow: none !important;
+  padding: 5px 8px !important;      /* как в базе у mini_btn */
+  border-radius: 9px !important;    /* как в базе у mini_btn */
+  font-size: 16px !important;       /* чтобы совпало с контактами */
+  line-height: 1.2 !important;
+}
+
+#gpt_newcontragents_deliveryList .gpt_newcontragents_mini_btn:hover{
+  background: var(--nc-soft2) !important;
+}
+
+#gpt_newcontragents_deliveryList .gpt_newcontragents_mini_btn:active{
+  background: var(--nc-press) !important;
+  transform: translateY(1px);
+}
+
+/* "По умолчанию" в delivery (если используется другой класс) */
+#gpt_newcontragents_deliveryList .gpt_newcontragents_btn_green,
+#gpt_newcontragents_deliveryList .gpt_newcontragents_btn_default_active{
+  background: color-mix(in srgb, var(--nc-success) 18%, transparent) !important;
+  border-color: color-mix(in srgb, var(--nc-success) 55%, var(--nc-line)) !important;
+  color: var(--nc-text) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nc-success) 16%, transparent) !important;
+}
