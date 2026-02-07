@@ -4,7 +4,6 @@ declare(strict_types=1);
 require __DIR__ . '/../inc/bootstrap.php';
 
 use App\Core\Auth;
-use App\Core\View;
 
 if (!empty($gpt_user)) {
     header('Location: index.php?m=home');
@@ -27,7 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error = 'Неверный логин или пароль';
 }
 
-echo View::render(__DIR__ . '/../views/auth/login.php', [
-    'title' => 'Вход',
+// Рендер (без View::render)
+$title = 'Вход';
+$gpt_view_vars = [
+    'title' => $title,
     'error' => $error,
-]);
+];
+extract($gpt_view_vars, EXTR_SKIP);
+ob_start();
+include __DIR__ . '/../views/auth/login.php';
+echo ob_get_clean();

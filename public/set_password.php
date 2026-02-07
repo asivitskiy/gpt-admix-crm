@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 require __DIR__ . '/../inc/bootstrap.php';
 
-use App\Core\View;
 
 if (empty($gpt_user)) {
     header('Location: login.php');
@@ -38,9 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-echo View::render(__DIR__ . '/../views/auth/set_password.php', [
-    'title' => 'Установка пароля',
+// Рендер (без View::render)
+$title = 'Установка пароля';
+$gpt_view_vars = [
+    'title' => $title,
     'error' => $error,
     'success' => $success,
     'user' => $gpt_user,
-]);
+];
+extract($gpt_view_vars, EXTR_SKIP);
+ob_start();
+include __DIR__ . '/../views/auth/set_password.php';
+echo ob_get_clean();

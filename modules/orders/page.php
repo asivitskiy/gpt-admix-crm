@@ -3,4 +3,8 @@ declare(strict_types=1);
 
 $title = 'Заказы';
 $subtitle = '';
-$content = \App\Core\View::render(__DIR__ . '/view.php', []);
+
+// Рендер центральной части (без View::render, чтобы не путаться)
+ob_start();
+include __DIR__ . '/view.php';
+$content = ob_get_clean();

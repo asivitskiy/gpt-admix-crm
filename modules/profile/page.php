@@ -26,7 +26,12 @@ if ($action === 'theme' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 $title = 'Личный кабинет';
 $subtitle = 'Настройки пользователя';
 
-$content = \App\Core\View::render(__DIR__ . '/views/me.php', [
+// Рендер центральной части (без View::render)
+$gpt_view_vars = [
     'user' => $user,
     'theme' => $theme ?? ($_SESSION['theme'] ?? 'dark'),
-]);
+];
+extract($gpt_view_vars, EXTR_SKIP);
+ob_start();
+include __DIR__ . '/views/me.php';
+$content = ob_get_clean();

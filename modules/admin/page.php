@@ -151,16 +151,26 @@ if ($sub === 'users') {
     $flash = $_SESSION['admin_flash'] ?? [];
     $_SESSION['admin_flash'] = [];
 
-    $content = \App\Core\View::render(__DIR__ . '/views/users.php', [
+    // Рендер центральной части (без View::render)
+    $gpt_view_vars = [
         'users' => $users,
         'is_admin' => $is_admin,
         'flash' => $flash,
-    ]);
+    ];
+    extract($gpt_view_vars, EXTR_SKIP);
+    ob_start();
+    include __DIR__ . '/views/users.php';
+    $content = ob_get_clean();
 } else {
     $title = 'Админка';
     $subtitle = '';
 
-    $content = \App\Core\View::render(__DIR__ . '/views/index.php', [
+    // Рендер центральной части (без View::render)
+    $gpt_view_vars = [
         'is_admin' => $is_admin,
-    ]);
+    ];
+    extract($gpt_view_vars, EXTR_SKIP);
+    ob_start();
+    include __DIR__ . '/views/index.php';
+    $content = ob_get_clean();
 }

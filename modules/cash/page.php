@@ -98,6 +98,11 @@ $demo = [
   ],
 ];
 
-$content = \App\Core\View::render(__DIR__ . '/view.php', [
+// Рендер центральной части (без View::render)
+$gpt_view_vars = [
   'demo' => $demo,
-]);
+];
+extract($gpt_view_vars, EXTR_SKIP);
+ob_start();
+include __DIR__ . '/view.php';
+$content = ob_get_clean();

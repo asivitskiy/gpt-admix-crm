@@ -36,6 +36,7 @@ $m = trim($m);
 
 // белый список
 $routes = [
+    'order_new' => __DIR__ . '/../modules/order_new/page.php',
     'home'      => __DIR__ . '/../modules/home/page.php',
     'orders'    => __DIR__ . '/../modules/orders/page.php',
     'schedule'  => __DIR__ . '/../modules/schedule/page.php',
@@ -54,6 +55,7 @@ if (!isset($routes[$m])) {
 }
 
 $nav = [
+    ['key'=>'order_new', 'title' => 'Новый заказ', 'icon' => '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm-7 14h-2v-4H6v-2h4V7h2v4h4v2h-4v4z"/></svg>', 'href' => 'index.php?m=order_new', 'active' => ($m==='order_new')],
     ['key'=>'home',      'title' => 'Главная',        'icon' => '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3l9 8h-3v9h-5v-6H11v6H6v-9H3l9-8z"/></svg>',      'href' => 'index.php?m=home',      'active' => ($m==='home')],
     ['key'=>'orders',    'title' => 'Заказы',         'icon' => '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M7 3h10v2H7V3zm-2 4h14v2H5V7zm0 4h14v2H5v-2zm0 4h10v2H5v-2z"/></svg>',    'href' => 'index.php?m=orders',    'active' => ($m==='orders')],
     ['key'=>'schedule',  'title' => 'График работ',   'icon' => '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm13 6H4v12h16V8z"/></svg>',  'href' => 'index.php?m=schedule',  'active' => ($m==='schedule')],
@@ -80,8 +82,8 @@ $topRightHtml = '';
 
 require $routes[$m];
 
-// рендерим layout
-echo App\Core\View::render(__DIR__ . '/../views/layout.php', [
+// рендерим layout (без View::render)
+$gpt_view_vars = [
     'title' => $title,
     'subtitle' => $subtitle,
     'content' => $content,
@@ -89,4 +91,8 @@ echo App\Core\View::render(__DIR__ . '/../views/layout.php', [
     'user' => $user,
     'theme' => $theme,
     'topRightHtml' => $topRightHtml,
-]);
+];
+extract($gpt_view_vars, EXTR_SKIP);
+ob_start();
+include __DIR__ . '/../views/layout.php';
+echo ob_get_clean();
