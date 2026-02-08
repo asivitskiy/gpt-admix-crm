@@ -1,0 +1,174 @@
+/* ===== Order New: Work row (table / excel-like) ===== */
+.gpt_on_wrap{max-width:1400px}
+
+/* works container */
+.onWorks{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+
+/* row wrapper: 1400 = 20 (handle) + 1340 (table) + 40 (actions) */
+.onWorkRow{
+  width:1400px;
+  max-width:100%;
+  display:flex;
+  align-items:stretch;
+  border:2px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  background: var(--card);
+}
+
+/* left handle */
+.onWorkHandle{
+  width:20px;
+  background: rgba(120,120,120,.35);
+  cursor: grab;
+}
+.onWorkRow.is-dragging .onWorkHandle{cursor: grabbing;}
+
+/* right actions */
+.onWorkActions{
+  width:40px;
+  border-left:1px solid var(--line);
+  background: rgba(127,127,127,.10);
+  display:flex;
+  flex-direction:column;
+}
+.onActBtn{
+  flex:1;
+  border:0;
+  border-radius:0;
+  background: transparent;
+  cursor:pointer;
+  color: var(--text);
+  font-size:16px;
+  border-bottom:1px solid var(--line);
+}
+.onActBtn:last-child{border-bottom:0;}
+.onActBtn:hover{background: rgba(127,127,127,.16);}
+.onActBtn.onDanger{color:#b00020;}
+
+/* table wrapper */
+.onWorkTableWrap{flex:1;min-width:0;}
+.onWorkTable{
+  width:100%;
+  border-collapse:collapse;  /* без внутренних промежутков */
+  table-layout:fixed;        /* стабильные колонки */
+}
+
+/* cells */
+.onCell{
+  border-right:2px solid var(--line);
+  border-bottom:2px solid var(--line);
+  padding:0;
+  vertical-align:top;
+  background: var(--card);
+}
+.onWorkTable tr:last-child .onCell{border-bottom:0;}
+.onWorkTable .onCell:last-child{border-right:0;}
+
+/* inputs */
+.onCell .input{
+  width:100%;
+  box-sizing:border-box;
+  border:0 !important;
+  border-radius:0 !important;
+  background: transparent;
+  color: var(--text);
+  padding: 4px 6px;
+  outline:none;
+  font: inherit;
+}
+.onCell select.input{padding-right:22px;}
+.taR{text-align:right;}
+.onBold{font-weight:800;}
+.onSumBold .input{font-weight:900;}
+
+/* mini buttons Ш/В */
+.onTinyBtn{padding:0;}
+.onMiniBtn{
+  width:100%;
+  height:100%;
+  border:0;
+  border-radius:0;
+  background: rgba(127,127,127,.12);
+  color: var(--text);
+  font-weight:800;
+  cursor:pointer;
+}
+.onMiniBtn:hover{background: rgba(127,127,127,.18);}
+
+/* sheets */
+.onSheetsBox{
+  padding:6px 8px;
+  font-size:12px;
+  line-height:1.1;
+  color: var(--textMuted);
+}
+.onSheetsLine{font-weight:800;}
+.onSheetsLine.muted{font-weight:500;color:var(--muted);}
+
+/* textarea: стандартное поведение (скролл + resize) */
+.onCell textarea.input{
+  height:58px;
+  min-height:58px;
+  overflow:auto;
+  resize: vertical;
+  white-space: pre-wrap;
+}
+
+/* placeholder while drag */
+.onWorkPlaceholder{
+  border:1px dashed color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius:10px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  margin:0;
+}
+
+/* ===== confirm modal (delete row) ===== */
+.onModal{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index: 10000;
+}
+.onModal[hidden]{display:none;}
+.onModalBox{
+  width: 420px;
+  max-width: calc(100vw - 24px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+.onModalHead{
+  padding: 12px 14px;
+  font-weight: 900;
+  border-bottom: 1px solid var(--line);
+}
+.onModalBody{padding: 12px 14px; color: var(--text);}
+.onModalFoot{
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+}
+.onModalBtn{
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(127,127,127,.08);
+  color: var(--text);
+  cursor:pointer;
+  font-weight:800;
+}
+.onModalBtn:hover{background: rgba(127,127,127,.12);}
+.onModalBtn.danger{
+  border-color: rgba(220,60,60,.45);
+  background: rgba(220,60,60,.10);
+}
+.onModalBtn.danger:hover{background: rgba(220,60,60,.16);}

@@ -75,46 +75,8 @@
   .gpt_on_statusGrid{display:grid;grid-template-columns:1fr;gap:8px;}
   .gpt_on_statusBtns{display:flex;gap:8px;flex-wrap:wrap;}
 
-  /* ===== Works list ===== */
-  .gpt_on_works{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
-  .gpt_on_work{
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 10px;
-  }
-  .gpt_on_workTop{
-    display:grid;
-    grid-template-columns: 220px 110px 70px 60px 90px 110px 130px 80px 90px;
-    gap:8px;
-    align-items:center;
-  }
-  @media (max-width: 1200px){
-    .gpt_on_workTop{grid-template-columns: 1fr 1fr 1fr;}
-  }
-  .gpt_on_workBody{
-    display:grid;
-    grid-template-columns: 1.2fr 1fr 220px;
-    gap:8px;
-    margin-top:8px;
-    align-items:start;
-  }
-  @media (max-width: 1200px){
-    .gpt_on_workBody{grid-template-columns: 1fr;}
-  }
-
-  .gpt_on_work textarea{min-height:38px;resize:none;}
-  .gpt_on_moneyBox{display:grid;grid-template-columns: 1fr 1fr 1fr;gap:8px;}
-  .gpt_on_moneyBox input{ text-align:right; }
-
-  .gpt_on_rightMini{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-  .gpt_on_gear{
-    width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-    border-radius:12px;border:1px solid var(--line);
-    background: rgba(127,127,127,.08);
-    cursor:pointer;
-    flex:0 0 auto;
-  }
+  /* ===== Works list (work rows) ===== */
+<?php include __DIR__ . '/assets/order_new.css'; ?>
 
   /* helper: small label above inputs */
   .gpt_on_lbl{font-size:12px;color:var(--muted);margin-bottom:4px;}
@@ -291,53 +253,25 @@
 
 
   <!-- ===== works ===== -->
-  <div class="gpt_on_works">
+  
+    <div class="onWorks" id="orderWorks">
+      <?php for($i=0;$i<3;$i++): $idx=$i; include __DIR__ . '/parts/work_row.php'; endfor; ?>
+    </div>
 
-    <?php for($i=1;$i<=3;$i++): ?>
-    <div class="gpt_on_work">
-      <div class="gpt_on_workTop">
-        <input type="text" value="Книжка A5" placeholder="изделие" />
-        <select>
-          <option>XEROX</option>
-          <option>Plotter</option>
-        </select>
-        <select>
-          <option>4+4</option>
-          <option>4+0</option>
-        </select>
-        <select>
-          <option></option>
-          <option>опция</option>
-        </select>
-        <input type="number" value="210" />
-        <input type="number" value="148" />
-        <select>
-          <option>80 офсет</option>
-          <option>130 м/г</option>
-        </select>
-        <input type="text" value="0.00" />
-        <input type="number" value="10" />
-      </div>
-
-      <div class="gpt_on_workBody">
-        <textarea class="gpt_autogrow" placeholder="описание / ТЗ (многострочный инпут)">Описание (инпут)...</textarea>
-
-        <textarea class="gpt_autogrow" placeholder="постпечатка / примечания (многострочный инпут)"></textarea>
-
-        <div class="gpt_on_rightMini">
-          <div class="gpt_on_moneyBox">
-            <input type="text" value="0" />
-            <input type="text" value="0" />
-            <input type="text" value="0" />
-          </div>
-          <button class="gpt_on_gear" type="button" title="настройки">⚙</button>
+    <!-- confirm delete modal -->
+    <div class="onModal" id="onWorkDelModal" hidden>
+      <div class="onModalBox" role="dialog" aria-modal="true" aria-labelledby="onWorkDelTitle">
+        <div class="onModalHead" id="onWorkDelTitle">Удалить работу?</div>
+        <div class="onModalBody">Эта работа будет удалена из заказа. Отменить после удаления нельзя.</div>
+        <div class="onModalFoot">
+          <button type="button" class="onModalBtn" data-action="del_cancel">Отмена</button>
+          <button type="button" class="onModalBtn danger" data-action="del_confirm">Удалить</button>
         </div>
       </div>
-
     </div>
-    <?php endfor; ?>
 
-    <div class="card" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+
+<div class="card" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <button type="button" class="gpt_on_btnSmall primary">+ Добавить изделие</button>
       <button type="button" class="gpt_on_btnSmall">Скопировать изделие</button>
       <button type="button" class="gpt_on_btnSmall">Удалить выбранное</button>
@@ -348,39 +282,4 @@
 
 </div>
 
-<script>
-(function(){
-  // ====== autogrow for multiline inputs (textarea) ======
-  function autoGrow(t){
-    if (!t) return;
-    t.style.height = 'auto';
-    var h = t.scrollHeight;
-    // небольшой запас, чтобы строки не "сливались"
-    t.style.height = (h + 2) + 'px';
-  }
-
-  function bind(){
-    var list = document.querySelectorAll('textarea.gpt_autogrow');
-    for (var i=0;i<list.length;i++){
-      (function(t){
-        autoGrow(t);
-        t.addEventListener('input', function(){ autoGrow(t); });
-      })(list[i]);
-    }
-  }
-
-  // open contragents constructor modal
-  var btn = document.getElementById('gpt_on_openContragent');
-  if (btn){
-    btn.addEventListener('click', function(){
-      var o = document.getElementById('gpt_newcontragents_overlay');
-      if (o) o.style.display = 'flex';
-      var inp = document.getElementById('gpt_newcontragents_searchInput');
-      if (inp) inp.focus();
-    });
-  }
-
-  // initial
-  bind();
-})();
-</script>
+<script><?php include __DIR__ . '/assets/work_row.js'; ?></script>

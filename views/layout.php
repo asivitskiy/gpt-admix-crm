@@ -20,21 +20,21 @@ $theme = $theme ?? ($_SESSION['theme'] ?? 'dark');
     <?php include __DIR__ . '/partials/sidebar.php'; ?>
 
     <main class="main">
-      <div class="top">
+<!--      <div class="top">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
           <div>
-            <div style="font-weight:700;"><?php echo \App\Core\Helpers::h($title ?? ''); ?></div>
-            <?php if (!empty($subtitle)): ?>
-              <div class="muted"><?php echo \App\Core\Helpers::h($subtitle); ?></div>
-            <?php endif; ?>
+            <div style="font-weight:700;"><?php //echo \App\Core\Helpers::h($title ?? ''); ?></div>
+            <?php //if (!empty($subtitle)): ?>
+              <div class="muted"><?php //echo \App\Core\Helpers::h($subtitle); ?></div>
+            <?php //endif; ?>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <?php if (!empty($topRightHtml)) echo $topRightHtml; ?>
+            <?php //if (!empty($topRightHtml)) echo $topRightHtml; ?>
             <button class="btn" type="button" onclick="window.GPT_RightPanel && window.GPT_RightPanel.open && window.GPT_RightPanel.open()">Панель</button>
           </div>
         </div>
       </div>
-
+!-->
       <div class="content">
         <?php echo $content ?? ''; ?>
       </div>
