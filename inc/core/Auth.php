@@ -37,7 +37,7 @@ final class Auth
         $login = trim($login);
         if ($login === '' || $password === '') return false;
 
-        $st = $pdo->prepare("SELECT id, password_hash, is_active, theme, must_set_password FROM users WHERE login=? LIMIT 1");
+        $st = $pdo->prepare("SELECT id, password_hash, is_active, theme, must_set_password, text_scale FROM users WHERE login=? LIMIT 1");
         $st->execute([$login]);
         $u = $st->fetch(PDO::FETCH_ASSOC);
         if (!$u) return false;
@@ -47,6 +47,7 @@ final class Auth
 
         $_SESSION['uid'] = (int)$u['id'];
         $_SESSION['theme'] = $u['theme'] ?? 'dark';
+        $_SESSION['text_scale'] = isset($u['text_scale']) ? (float)$u['text_scale'] : 1.0;
         // если пароль временный (первый вход / сброс) — заставляем установить новый
         $_SESSION['force_pw_change'] = ((int)($u['must_set_password'] ?? 0) === 1) ? 1 : 0;
         return true;
@@ -57,7 +58,7 @@ final class Auth
         $uid = self::id();
         if ($uid <= 0) return null;
 
-        $st = $pdo->prepare("SELECT id, name, login, role, theme, is_active, letter, must_set_password FROM users WHERE id=? LIMIT 1");
+        $st = $pdo->prepare("SELECT id, name, login, role, theme, is_active, letter, must_set_password, text_scale FROM users WHERE id=? LIMIT 1");
         $st->execute([$uid]);
         $u = $st->fetch(PDO::FETCH_ASSOC);
         if (!$u) return null;

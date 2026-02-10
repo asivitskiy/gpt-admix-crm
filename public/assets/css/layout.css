@@ -6,7 +6,7 @@
   --muted:#9aa3b2;
   --accent:#6ee7ff;
   --line:rgba(255,255,255,.08);
-  --radius:16px;
+  --radius:10px;
 
   --sideW:260px;
   --fs:14px;
@@ -119,14 +119,14 @@ html[data-theme="light"] .top{background:rgba(255,255,255,.65);}
 
 /* вот тут теперь и будет появляться скролл только если реально нужно */
 .content{
-  padding:18px;
+  padding:8px;
   min-width:0;
   min-height:0;
   overflow:auto;     /* auto -> полосы только при необходимости */
   flex:1 1 auto;
 }
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:8px;}
 .muted{color:var(--muted)}
 .grid{display:grid;gap:12px;}
 
@@ -175,3 +175,92 @@ select option{
   background: var(--panel);
   color: var(--text);
 }
+
+/* ===== statusbar v3 ===== */
+.gpt_statusbar{
+  /*--sbGap: 10px;
+  --sbConn: 22px;
+*/
+  max-width: 1400px;
+  display:flex;
+  align-items:center;
+  gap: var(--sbGap);
+  overflow:auto;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 4px);
+  background: color-mix(in srgb, var(--panel) 65%, transparent);
+}
+
+.gpt_sb_step{
+  min-width: 210px;
+  flex: 0 0 auto;
+  display:flex;
+  flex-direction:column;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+}
+
+.gpt_sb_title{
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.1;
+}
+
+.gpt_sb_row{display:flex; gap:8px; align-items:center;}
+.gpt_sb_row select{
+  width: 100%;
+  min-width: 120px;
+  height: 32px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.gpt_sb_conn{
+  flex: 0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+}
+
+.gpt_sb_connLine{
+  width: var(--sbConn);
+  height: 2px;
+  background: var(--line);
+  border-radius: 999px;
+}
+
+/* кнопка "дальше" */
+.gpt_sb_ok{
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--text);
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  user-select:none;
+  padding: 0;
+}
+
+.gpt_sb_ok svg{
+  width: 32px;   /* почти во всю кнопку */
+  height: 32px;
+  opacity: .9;
+}
+
+.gpt_sb_ok:hover{
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.gpt_sb_ok.isPressed{
+  transform: scale(0.94);
+}
+

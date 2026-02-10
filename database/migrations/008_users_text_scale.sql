@@ -1,0 +1,2 @@
+ALTER TABLE `users`
+  ADD COLUMN `text_scale` DECIMAL(4,2) NOT NULL DEFAULT 1.00;

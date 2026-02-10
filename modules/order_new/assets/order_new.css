@@ -2,7 +2,7 @@
 .gpt_on_wrap{max-width:1400px}
 
 /* works container */
-.onWorks{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.onWorks{display:flex;flex-direction:column;gap:6px;margin-top:12px}
 
 /* row wrapper: 1400 = 20 (handle) + 1340 (table) + 40 (actions) */
 .onWorkRow{
@@ -79,7 +79,7 @@
 }
 .onCell select.input{padding-right:22px;}
 .taR{text-align:right;}
-.onBold{font-weight:800;}
+.onBold{font-weight:700!important;}
 .onSumBold .input{font-weight:900;}
 
 /* mini buttons Ш/В */
@@ -108,8 +108,8 @@
 
 /* textarea: стандартное поведение (скролл + resize) */
 .onCell textarea.input{
-  height:58px;
-  min-height:58px;
+  height:50px;
+  min-height:50px;
   overflow:auto;
   resize: vertical;
   white-space: pre-wrap;
@@ -153,7 +153,7 @@
   padding: 12px 14px;
   border-top: 1px solid var(--line);
   display:flex;
-  gap:10px;
+  gap:6px;
   justify-content:flex-end;
 }
 .onModalBtn{

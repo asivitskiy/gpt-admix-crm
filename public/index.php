@@ -1,5 +1,48 @@
 <?php
 declare(strict_types=1);
+// =========================================================
+// Static files (assets) fallback
+// ---------------------------------------------------------
+// Иногда веб-сервер (OSP) переписывает ЛЮБОЙ запрос на public/index.php.
+// Тогда даже /assets/*.js возвращаются как HTML страницы/ошибки, и браузер
+// падает с `Unexpected token '<'` и `$ is not defined`.
+// Этот ранний блок отдаёт реальные файлы из public/* напрямую.
+// =========================================================
+
+$__uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+// отсекаем попытки "../"
+if (strpos($__uri_path, '..') === false) {
+    // Раздаём только статику из /assets/ (папка: public/assets)
+    if (strpos($__uri_path, '/assets/') === 0) {
+        $__file = __DIR__ . $__uri_path; // __DIR__ = public
+        if (is_file($__file)) {
+            // content-type по расширению (минимально необходимое)
+            $ext = strtolower(pathinfo($__file, PATHINFO_EXTENSION));
+            $map = [
+                'js'   => 'application/javascript; charset=UTF-8',
+                'css'  => 'text/css; charset=UTF-8',
+                'png'  => 'image/png',
+                'jpg'  => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'gif'  => 'image/gif',
+                'svg'  => 'image/svg+xml',
+                'webp' => 'image/webp',
+                'ico'  => 'image/x-icon',
+                'woff' => 'font/woff',
+                'woff2'=> 'font/woff2',
+                'ttf'  => 'font/ttf',
+                'eot'  => 'application/vnd.ms-fontobject',
+                'map'  => 'application/json; charset=UTF-8',
+            ];
+            header('Content-Type: ' . ($map[$ext] ?? 'application/octet-stream'));
+            header('Content-Length: ' . filesize($__file));
+            header('Cache-Control: public, max-age=86400');
+            readfile($__file);
+            exit;
+        }
+    }
+}
+
 
 /*
  * ADMIX CRM: упрощённая модульная архитектура (НЕ full MVC)

@@ -14,8 +14,31 @@ $theme = $theme ?? ($_SESSION['theme'] ?? 'dark');
   <!-- Widgets -->
   <link rel="stylesheet" href="/assets/widgets/contragents_widget.css?v=1">
   <link rel="stylesheet" href="/assets/widgets/contragents_widget.theme.css?v=1">
+
+<script src="/assets/vendor/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="/assets/vendor/jquery.timepicker.min.css">
+<script src="/assets/vendor/jquery.timepicker.min.js"></script>
+
+<link rel="stylesheet" href="/assets/vendor/jquery-ui.min.css">
+<script src="/assets/vendor/jquery-ui.min.js"></script>
+
 </head>
-<body>
+<?php
+// ===== text scale (0.80 .. 1.50) =====
+$gpt_text_scale = 1.00;
+
+if (isset($_SESSION['text_scale'])) {
+  $gpt_text_scale = floatval($_SESSION['text_scale']);
+} elseif (isset($user) && is_array($user) && isset($user['text_scale'])) {
+  $gpt_text_scale = floatval($user['text_scale']);
+}
+
+if ($gpt_text_scale < 0.80) $gpt_text_scale = 0.80;
+if ($gpt_text_scale > 1.50) $gpt_text_scale = 1.50;
+
+$gpt_text_scale_attr = number_format($gpt_text_scale, 2, '.', '');
+?>
+<body style="font-size: <?php echo $gpt_text_scale_attr; ?>em;">
   <div class="app">
     <?php include __DIR__ . '/partials/sidebar.php'; ?>
 
