@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/../../inc/bootstrap.php';
+require __DIR__ . '/../../app/inc/bootstrap.php';
 
 // Only for authenticated users
 if (!$gpt_user) {

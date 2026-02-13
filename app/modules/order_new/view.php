@@ -4,6 +4,9 @@
 // и сохранить многострочные инпуты (авто-рост textarea).
 ?>
 
+<!-- module assets (public) -->
+<link rel="stylesheet" href="/assets/modules/order_new/order_new.css?v=1">
+
 <style>
   /* ===== New Order — scoped styles ===== */
   /*
@@ -191,7 +194,6 @@
 
   
   /* ===== Works list (work rows) ===== */
-<?php include __DIR__ . '/assets/order_new.css'; ?>
 
   /* helper: small label above inputs */
   .gpt_on_lbl{font-size:12px;color:var(--muted);margin-bottom:0px;}
@@ -377,36 +379,63 @@
     </div>
   </div>
 
-   <!-- <div class="gpt_on_cardTitle" style="font-size:13px;">Оплата</div>-->
-<div class="gpt_on_lbl">Оплата</div>
-  <!-- МАКЕТ оплаты -->
-  <div class="gpt_pay_grid" id="gptPayBox">
+<!-- ===== Оплата ===== -->
+<div class="gpt_on_sectionTitle" style="margin-top:10px;">Оплата</div>
 
-    <div class="gpt_pay_left">
-      <select placeholder="">
-        
-        <option>выберите тип оплаты</option>
-        <option>Наличные/Карта/QR</option>
-        <option>Оплата по счету</option>
-      </select>
+<div class="gpt_pay_wrap">
 
-      <textarea type="text" placeholder="№ счета / чека / дата" class="invoiceNumber" ></textarea>
+  <!-- LEFT: выбор типа + динамический интерфейс -->
+  <div class="gpt_pay_left">
 
-      <input class="gpt_pay_amount" type="number" step="0.01" min="0" inputmode="decimal" placeholder="Сумма" />
-      <button type="button" class="gpt_on_btnSmall primary gpt_pay_submit">Внести</button>
+    <select id="gpt_pay_type" class="input">
+      <!-- options заполняются JS -->
+    </select>
+
+    <!-- MANAGER MODE -->
+    <div id="gpt_pay_mode_manager" class="gpt_pay_mode" style="display:none;">
+      <textarea id="gpt_pay_note" class="input gpt_pay_note" placeholder="№ счета / чек / дата&#10;пояснение..."></textarea>
+
+      <div class="gpt_pay_row">
+        <input id="gpt_pay_amount" class="input" type="text" placeholder="Сумма">
+        <button id="gpt_pay_add_btn" type="button" class="gpt_pay_btn">Внести</button>
+      </div>
     </div>
 
-    <div class="gpt_pay_right">
-      <div class="gpt_pay_totals">
-        <div>Оплачено: <b>0</b></div>
-        <div><b>Общая сумма:</b> 0.00</div>
-        <div>Доплатить: <b>0.00</b></div>
-      </div>
-
-      
+    <!-- ACCOUNTING MODE -->
+    <div id="gpt_pay_mode_accounting" class="gpt_pay_mode" style="display:none;">
+      <div id="gpt_pay_acc_badge" class="gpt_pay_acc_badge">Счёт запрошен</div>
+      <!-- позже сюда выведем номер/дату счета из бух.модуля -->
     </div>
 
   </div>
+
+  <!-- RIGHT: суммы + история -->
+  <div class="gpt_pay_right">
+    <div class="gpt_pay_hist">
+      <div id="gpt_pay_history"></div>
+    </div>
+    
+    <div class="gpt_pay_totals">
+      <div class="gpt_pay_total_row">
+        <span class="muted">Оплачено:</span>
+        <strong><span id="gpt_pay_sum_paid">0.00</span></strong>
+      </div>
+      <div class="gpt_pay_total_row">
+        <span class="muted">Общая сумма:</span>
+        <strong><span id="gpt_pay_sum_total" data-total="0">0.00</span></strong>
+      </div>
+      <div class="gpt_pay_total_row">
+        <span class="muted">Доплатить:</span>
+        <strong><span id="gpt_pay_sum_need">0.00</span></strong>
+      </div>
+    </div>
+
+
+
+  </div>
+
+</div>
+
 
 </div>
 
@@ -444,7 +473,7 @@
 
   </div><!-- topLayout -->
 
-<script><?php include __DIR__ . '/assets/work_row.js'; ?></script>
+<script src="/assets/modules/order_new/work_row.js?v=1"></script>
 
 </div><!-- gpt_on_wrap -->
 <script>
@@ -498,3 +527,6 @@
     $('#deadlineDate, #deadlineTime').on('change', syncDeadline);
   });
 </script>
+
+<script src="/assets/modules/order_new/order_new_payments.js?v=1"></script>
+

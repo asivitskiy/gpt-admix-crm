@@ -1,7 +1,7 @@
 <?php
 // NOTE: Only layout/design. No business logic / DB queries here yet.
 ?>
-<link rel="stylesheet" href="/assets/modules/orders_mainlist.css?v=1">
+<link rel="stylesheet" href="/assets/modules/orders/orders_mainlist.css?v=1">
 
 <div class="gptml">
   <div class="gptml_wrap">
@@ -160,4 +160,4 @@
   </div>
 </div>
 
-<script defer src="/assets/modules/orders_mainlist.js?v=1"></script>
+<script defer src="/assets/modules/orders/orders_mainlist.js?v=1"></script>

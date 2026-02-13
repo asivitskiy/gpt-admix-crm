@@ -57,7 +57,7 @@ if (strpos($__uri_path, '..') === false) {
  * чтобы не возникала путаница и дублирование.
  */
 
-require __DIR__ . '/../inc/bootstrap.php';
+require __DIR__ . '/../app/inc/bootstrap.php';
 
 use App\Core\Helpers;
 
@@ -79,17 +79,17 @@ $m = trim($m);
 
 // белый список
 $routes = [
-    'order_new' => __DIR__ . '/../modules/order_new/page.php',
-    'home'      => __DIR__ . '/../modules/home/page.php',
-    'orders'    => __DIR__ . '/../modules/orders/page.php',
-    'schedule'  => __DIR__ . '/../modules/schedule/page.php',
-    'cash'      => __DIR__ . '/../modules/cash/page.php',
-    'clients'   => __DIR__ . '/../modules/clients/page.php',
-    'suppliers' => __DIR__ . '/../modules/suppliers/page.php',
-    'messages'  => __DIR__ . '/../modules/messages/page.php',
-    'materials' => __DIR__ . '/../modules/materials/page.php',
-    'admin'     => __DIR__ . '/../modules/admin/page.php',
-    'profile'   => __DIR__ . '/../modules/profile/page.php',
+    'order_new' => __DIR__ . '/../app/modules/order_new/page.php',
+    'home'      => __DIR__ . '/../app/modules/home/page.php',
+    'orders'    => __DIR__ . '/../app/modules/orders/page.php',
+    'schedule'  => __DIR__ . '/../app/modules/schedule/page.php',
+    'cash'      => __DIR__ . '/../app/modules/cash/page.php',
+    'clients'   => __DIR__ . '/../app/modules/clients/page.php',
+    'suppliers' => __DIR__ . '/../app/modules/suppliers/page.php',
+    'messages'  => __DIR__ . '/../app/modules/messages/page.php',
+    'materials' => __DIR__ . '/../app/modules/materials/page.php',
+    'admin'     => __DIR__ . '/../app/modules/admin/page.php',
+    'profile'   => __DIR__ . '/../app/modules/profile/page.php',
 ];
 
 
@@ -137,5 +137,5 @@ $gpt_view_vars = [
 ];
 extract($gpt_view_vars, EXTR_SKIP);
 ob_start();
-include __DIR__ . '/../views/layout.php';
+include __DIR__ . '/../app/views/layout.php';
 echo ob_get_clean();

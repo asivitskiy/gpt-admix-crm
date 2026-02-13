@@ -9,7 +9,7 @@ $theme = $theme ?? ($_SESSION['theme'] ?? 'dark');
   <title><?=\App\Core\Helpers::h($title ?? 'CRM')?></title>
 
   <!-- Layout CSS -->
-  <link rel="stylesheet" href="/assets/css/layout.css?v=1">
+  <link rel="stylesheet" href="/assets/core/css/layout.css?v=1">
 
   <!-- Widgets -->
   <link rel="stylesheet" href="/assets/widgets/contragents_widget.css?v=1">

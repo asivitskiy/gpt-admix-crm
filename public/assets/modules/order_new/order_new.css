@@ -172,3 +172,149 @@
   background: rgba(220,60,60,.10);
 }
 .onModalBtn.danger:hover{background: rgba(220,60,60,.16);}
+
+
+/* ===== PAY BLOCK (left UI + right summary/history) ===== */
+
+.gpt_pay_wrap{
+  display:grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap:12px;
+  align-items:start;
+  min-height: 196px;
+}
+
+.gpt_pay_left .input,
+.gpt_pay_left select,
+.gpt_pay_left textarea{
+  width:100%;
+  box-sizing:border-box;
+}
+
+.gpt_pay_mode{
+  margin-top:8px;
+}
+
+.gpt_pay_note{
+  min-height:92px;
+  resize: vertical;
+  overflow:auto;
+}
+
+.gpt_pay_row{
+  display:grid;
+  grid-template-columns: 1fr 120px;
+  gap:8px;
+  align-items:center;
+  margin-top:8px;
+}
+
+.gpt_pay_btn{
+  width:100%;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background: var(--btnBg, rgba(120,170,255,.18));
+  color: var(--text);
+  font-weight:700;
+  cursor:pointer;
+}
+
+.gpt_pay_btn:hover{
+  filter: brightness(1.02);
+}
+
+.gpt_pay_acc_badge{
+  border:1px dashed var(--line);
+  border-radius:10px;
+  padding:10px 12px;
+  background: rgba(160,190,255,.12);
+  color: var(--text);
+  font-weight:700;
+}
+
+.gpt_pay_err{
+  border:1px solid rgba(255,80,80,.85) !important;
+  box-shadow: 0 0 0 2px rgba(255,80,80,.18) !important;
+}
+
+/* right side: totals + history */
+.gpt_pay_right{
+  border-left:1px solid var(--line);
+  padding-left:12px;
+
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:160px; /* можно подогнать под твой блок, чтобы было куда прижимать */
+}
+
+
+.gpt_pay_totals{
+  margin-top:auto; /* прижимает итоги к низу */
+  padding-top:10px;
+  border-top:1px solid var(--line);
+}
+
+.gpt_pay_total_row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:13px;
+}
+
+.gpt_pay_total_row strong{
+  font-size:14px;
+}
+
+.gpt_pay_hist{
+  flex:1 1 auto;   /* занимает верхнее пространство */
+  min-height:40px;
+}
+
+.gpt_pay_hist_row{
+  display:grid;
+  grid-template-columns: 1fr 90px;
+  gap:10px;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.gpt_pay_hist_row:last-child{
+  border-bottom:none;
+}
+
+.gpt_pay_hist_l{
+  min-width:0;
+}
+
+.gpt_pay_hist_date{
+  font-size:12px;
+  color: var(--muted, #8a8f98);
+  white-space:nowrap;
+  line-height:1.2;
+}
+
+.gpt_pay_hist_desc{
+  margin-top:2px;
+  font-size:13px;
+  color: var(--text);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  line-height:1.25;
+}
+
+.gpt_pay_hist_right{
+  text-align:right;
+  font-weight:800;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.gpt_pay_hist_empty{
+  color: var(--muted, #8a8f98);
+  font-size:12px;
+  padding:4px 0;
+}

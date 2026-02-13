@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 // Composer autoload (vendor packages).
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 /*
  * ADMIX CRM: упрощённая модульная архитектура (НЕ full MVC)
@@ -34,7 +34,7 @@ use App\Core\Config;
 use App\Core\Db;
 use App\Core\Auth;
 
-Helpers::loadEnv(__DIR__ . '/../.env');
+Helpers::loadEnv(__DIR__ . '/../../.env');
 
 Auth::start();
 
